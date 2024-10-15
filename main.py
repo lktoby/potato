@@ -8,7 +8,9 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('.'), intents=intents)
+activity = discord.Activity(type=discord.ActivityType.watching, name='https://github.com/lktoby/potato')
+
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('.'), intents=intents, activity=activity)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 tree = bot.tree
 
@@ -23,8 +25,6 @@ async def setup_hook():
     await tree.sync()
 
 bot.setup_hook = setup_hook
-
-bot.activity = discord.Game('cars')
 
 @bot.event
 async def on_ready():

@@ -4,9 +4,12 @@ import json
 import typing
 import aiohttp
 import discord
+from dotenv import load_dotenv
 from discord.ext import commands
 from discord import app_commands
 
+load_dotenv()
+tenor_api_key = os.getenv('TENOR_API_KEY')
 class Util(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -70,5 +73,17 @@ class Util(commands.Cog):
         elif type == 'Watching':
             await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
         await ctx.send(f'activity set to {type} {activity}')
+
+    @commands.hybrid_command(name='image', description='generates a random molcar image', with_app_command=True)
+    async def image(self, ctx: commands.Context):
+        q = "pui pui molcar"
+        client_key = "potato"
+        random = "true"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f'https://tenor.googleapis.com/v2/search?q={q}&key={tenor_api_key}&client_key={client_key}&random={random}') as resp:
+                data = await resp.json()
+                url = data['results'][0]['itemurl']
+                await ctx.send(url)
+
 async def setup(bot):
     await bot.add_cog(Util(bot))
