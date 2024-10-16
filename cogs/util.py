@@ -2,14 +2,10 @@ import os
 import sys
 import json
 import typing
-import aiohttp
+import datetime
 import discord
-from dotenv import load_dotenv
 from discord.ext import commands
 from discord import app_commands
-
-load_dotenv()
-tenor_api_key = os.getenv('TENOR_API_KEY')
 class Util(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -23,9 +19,19 @@ class Util(commands.Cog):
         await ctx.send(f'ping: {ping} ms')
 
     @commands.hybrid_command(name='perms', description='check user permissions in the server', with_app_command=True)
-    async def perms(self, ctx:commands.Context):
-        perm_list = [perm[0] for perm in ctx.author.guild_permissions if perm[1]]
-        await ctx.send(f'{ctx.author.name}\n{perm_list}')
+    async def perms(self, ctx:commands.Context, user: typing.Optional[discord.Member]):
+        if user is None:
+            user = ctx.author
+        perm_list = [perm[0] for perm in user.guild_permissions if perm[1]]
+        roles_list = [role.mention for role in user.roles]
+        embed = discord.Embed(title=user.name, color=0xfcb900, timestamp=datetime.datetime.now())
+        embed.set_thumbnail(url=user.avatar.url)
+        embed.add_field(name='permissions', value='\n'.join(perm_list))
+        embed.add_field(name='roles', value='\n'.join(roles_list))
+        embed.add_field(name='account created at', value=user.created_at.strftime('%D'), inline=True)
+        embed.add_field(name='joined at', value=user.joined_at.strftime('%d %b %Y'), inline=True)
+        await ctx.send(embed=embed)
+        
 
     @commands.hybrid_command(name='restart', description='restarts the bot', with_app_command=True)
     @commands.is_owner()
@@ -73,17 +79,6 @@ class Util(commands.Cog):
         elif type == 'Watching':
             await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
         await ctx.send(f'activity set to {type} {activity}')
-
-    @commands.hybrid_command(name='image', description='generates a random molcar image', with_app_command=True)
-    async def image(self, ctx: commands.Context):
-        q = "pui pui molcar"
-        client_key = "potato"
-        random = "true"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f'https://tenor.googleapis.com/v2/search?q={q}&key={tenor_api_key}&client_key={client_key}&random={random}') as resp:
-                data = await resp.json()
-                url = data['results'][0]['itemurl']
-                await ctx.send(url)
 
 async def setup(bot):
     await bot.add_cog(Util(bot))
