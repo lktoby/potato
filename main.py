@@ -10,7 +10,7 @@ intents.message_content = True
 
 activity = discord.Activity(type=discord.ActivityType.watching, name='https://github.com/lktoby/potato')
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('.'), intents=intents, activity=activity)
+bot = commands.Bot(command_prefix='.', intents=intents, activity=activity)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 tree = bot.tree
 
