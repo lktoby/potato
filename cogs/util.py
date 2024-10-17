@@ -7,11 +7,11 @@ from discord import app_commands
 class Util(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-
+        
     async def cog_load(self):
         print("Cog util loaded!")
     
-    @commands.hybrid_command(name='ping', description='returns bot ping' , with_app_command=True)
+    @commands.hybrid_command(name='ping', description='returns bot ping', with_app_command=True)
     async def ping(self, ctx: commands.Context):
         ping = round(self.bot.latency, 2) * 1000
         await ctx.send(f'ping: {ping} ms')

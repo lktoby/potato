@@ -19,7 +19,7 @@ class MolcarHelp(commands.HelpCommand):
 
     async def send_command_help(self, command):
         embed = discord.Embed(title=self.get_command_signature(command), color=0xfcb900, timestamp=datetime.now())
-        embed.add_field(name="Help", value=command.help)
+        embed.add_field(name="Help", value=command.description)
         alias = command.aliases
         if alias:
             embed.add_field(name="Aliases", value=", ".join(alias), inline=False)
@@ -44,9 +44,9 @@ class Help(commands.Cog):
         self.bot.help_command = self._original_help_command
 
     @app_commands.command(name='help', description='learn how the bot works')
-    async def help(self, interaction: discord.Interaction, command_or_group: typing.Optional[str]):
+    async def help(self, interaction: discord.Interaction, command: typing.Optional[str]):
         ctx = await self.bot.get_context(interaction)
-        entity = command_or_group and (command_or_group,) or ()
+        entity = command and (command,) or ()
         await ctx.send_help(*entity)
 
     # slash command credit: 
