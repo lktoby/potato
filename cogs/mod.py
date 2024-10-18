@@ -53,7 +53,7 @@ class Mod(commands.Cog):
         print(f'{ctx.author} ({ctx.author.id}) is restarting the bot...')
         os.execv(sys.executable, ['python'] + sys.argv)
     
-    @commands.command(name='sync')
+    @commands.command(name='sync', hidden=True)
     @commands.is_owner()
     async def sync(self, ctx: commands.Context):
         await ctx.send('syncing commands...')

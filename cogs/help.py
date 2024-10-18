@@ -12,7 +12,8 @@ class MolcarHelp(commands.HelpCommand):
            command_signatures = [self.get_command_signature(c) for c in filtered]
            if command_signatures:
                 cog_name = getattr(cog, "qualified_name", "No Category")
-                embed.add_field(name=cog_name, value="\n".join(command_signatures), inline=False)
+                if cog_name != "Mod":
+                    embed.add_field(name=cog_name, value="\n".join(command_signatures), inline=False)
 
         channel = self.get_destination()
         await channel.send(embed=embed)
@@ -24,6 +25,13 @@ class MolcarHelp(commands.HelpCommand):
         if alias:
             embed.add_field(name="Aliases", value=", ".join(alias), inline=False)
 
+        channel = self.get_destination()
+        await channel.send(embed=embed)
+
+    async def send_cog_help(self, cog: commands.Cog):
+        cmds = await self.filter_commands(cog.get_commands(), sort=True)
+        embed = discord.Embed(title=cog.qualified_name, description='run `help [command]` for detailed explanation of every command', color=0xfcb900, timestamp=datetime.now())
+        embed.add_field(name='Commands', value='\n'.join(cmd.name for cmd in cmds), inline=False)
         channel = self.get_destination()
         await channel.send(embed=embed)
 
@@ -39,6 +47,9 @@ class Help(commands.Cog):
         help_command = MolcarHelp()
         help_command.cog = self
         bot.help_command = help_command
+
+    async def cog_load(self):
+        print("Cog help loaded!")
 
     def cog_unload(self):
         self.bot.help_command = self._original_help_command
