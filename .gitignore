@@ -3,3 +3,4 @@ discord.log
 bot-env/
 venv/
 __pycache__/
+cogs/__pycache__/
