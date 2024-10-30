@@ -28,7 +28,7 @@ bot.setup_hook = setup_hook
 
 @bot.event
 async def on_ready():
-    await print(f'logged in as {bot.user}')
+    print(f'logged in as {bot.user}')
 
 @bot.listen('on_message')
 async def on_message(message: discord.Message):
