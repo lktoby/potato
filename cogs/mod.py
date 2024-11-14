@@ -11,7 +11,7 @@ class Mod(commands.Cog):
         self.bot = bot
 
     async def cog_load(self):
-        print("Cog mod loaded!")
+        print(f"Cog {self.__cog_name__} loaded!")
 
     @app_commands.command(name='embed', description='outputs an embed from json')
     @commands.has_permissions(administrator=True)

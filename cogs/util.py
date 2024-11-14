@@ -10,7 +10,7 @@ class Util(commands.Cog):
         self.bot = bot
 
     async def cog_load(self):
-        print("Cog util loaded!")
+        print(f"Cog {self.__cog_name__} loaded!")
     
     @commands.hybrid_command(name='ping', description='returns bot ping', with_app_command=True)
     async def ping(self, ctx: commands.Context):

@@ -29,7 +29,7 @@ class Fun(commands.Cog):
         self.bot = bot
 
     async def cog_load(self):
-        print("Cog fun loaded!")
+        print(f"Cog {self.__cog_name__} loaded!")
 
     @commands.hybrid_command(name='image', description='generates a random molcar image', with_app_command=True)
     async def image(self, ctx: commands.Context):

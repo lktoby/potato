@@ -49,7 +49,7 @@ class Help(commands.Cog):
         bot.help_command = help_command
 
     async def cog_load(self):
-        print("Cog help loaded!")
+        print(f"Cog {self.__cog_name__} loaded!")
 
     def cog_unload(self):
         self.bot.help_command = self._original_help_command
