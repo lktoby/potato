@@ -1,6 +1,5 @@
 import os
 import aiohttp
-import typing
 import discord
 from discord.ext import commands
 from discord import app_commands
@@ -11,7 +10,9 @@ load_dotenv()
 tenor_api_key = os.getenv('TENOR_API_KEY')
 gcp_id = os.getenv('GCP_ID')
 
-def translate_jpen(text: str = ''):
+def translate_jpen(
+    text: str = ''
+) -> translate_v3.TranslationServiceClient:
     client = translate_v3.TranslationServiceClient()
     parent = f"projects/{gcp_id}/locations/global"
     response = client.translate_text(
@@ -21,11 +22,7 @@ def translate_jpen(text: str = ''):
         mime_type="text/plain",
         source_language_code="ja",
     )
-    translated = ''
-    for translation in response.translations:
-        print(f"Translated text: {translation.translated_text}")
-        translated = translation.translated_text
-    return translated
+    return response.translations[0].translated_text
 
 class Fun(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -35,18 +32,8 @@ class Fun(commands.Cog):
         print(f"Cog {self.__cog_name__} loaded!")
 
     @commands.hybrid_command(name='image', description='generates a random molcar image', with_app_command=True)
-    @app_commands.choices(character=[
-        app_commands.Choice(name='potato', value='potato pui pui molcar'),
-        app_commands.Choice(name='shiromo', value='shiromo pui pui molcar'),
-        app_commands.Choice(name='choco', value='choco pui pui molcar'),
-        app_commands.Choice(name='abbey', value='abbey pui pui molcar'),
-        app_commands.Choice(name='teddy', value='teddy pui pui molcar')
-    ])
-    async def image(self, ctx: commands.Context, character: typing.Optional[str]):
-        if character is None:
-            q = 'pui pui molcar'
-        else:
-            q = character
+    async def image(self, ctx: commands.Context):
+        q = "pui pui molcar"
         client_key = "potato"
         random = "true"
         async with aiohttp.ClientSession() as session:
