@@ -12,3 +12,8 @@ the code is currently a mess.
 1. `git clone` this repository.
 2. install all required packages with `pip install -r requirements.txt`.
 3. run the bot with `python main.py`.
+
+# todo
+~~- option to specify which character gif to generate in /image~~
+- random molfact command pulled from molwiki
+- detect ai generated content
