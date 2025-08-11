@@ -20,7 +20,8 @@ def translate_jpen(text: str = ''):
         mime_type="text/plain",
         source_language_code="ja",
     )
-    return response.translations[0].translated_text
+    translated_text = response.translations[0].translated_text
+    return translated_text
 
 class Fun(commands.Cog):
     def __init__(self, bot: commands.Bot):
