@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+import sys
+import traceback
 
 class ExceptionHandler(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -10,10 +12,10 @@ class ExceptionHandler(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
-        await ctx.reply(f'an error occured!\n \
-                        {error}',
+        await ctx.reply(f'an error occured!\n{error}',
                         mention_author=False)
-        print(error)
+        print(f'Ignoring exception in command {ctx.command}:', file=sys.stderr)
+        traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
         
 async def setup(bot: commands.Bot):
     await bot.add_cog(ExceptionHandler(bot))
